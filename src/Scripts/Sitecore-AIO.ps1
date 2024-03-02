@@ -41,7 +41,6 @@ function Get-Artificialized-Content {
     } | ConvertTo-Json
     
     write-host '---------------------------Artificializing------------------------------'
-    
     $response = Invoke-RestMethod -Uri $url -Method "POST" -Headers $headers -Body $body
     #$response | ConvertTo-Json
     write-host $response
@@ -70,15 +69,14 @@ $radioOptions = [ordered]@{
 $props = @{    
     Parameters  = 
     @(
-        @{ Name = "taskList"; Title = "What do you feel like doing today?"; Options = $radioOptions; Tooltip = "Select one or more options" }
+        @{ Name = "taskList"; Title = "What do you feel like doing today?"; Options = $radioOptions; Tooltip = "Select one oroptions" }
         @{ Name = "rootItem"; Title = "Which items will you like to work with now?"; Editor = "droptree"; Source = "/sitecore/content"; Tooltip = "Select from dropdown tree"}
     )    
-          
     Title       = "Make my content better"    
     Description = "Video Killed the Radio Star"    
     Width       = 600    
     Height      = 400    
-    ShowHints   = $true
+    ShowHints   = $false
 }
     
 $dialogResult = Read-Variable @props
@@ -96,7 +94,9 @@ if ($rootItem -eq $null) {
     Exit
 }
 Write-Host "Path of selected in droptree: " $rootItem.FullPath
+Write-Log "Path of selected in droptree: " $rootItem.FullPath
 Write-Host "========================================================="
+Write-Log "Starting Artificialization of content from "$rootItem.FullPath
 
 if($taskList -eq 1 -or $taskList -eq 3){
     $rootItem.Editing.BeginEdit()
@@ -167,10 +167,14 @@ if($taskList -eq 2){
 
 if($taskList -eq 4){
     write-host "This has not been implemented. I got the idea 4 in the morning when I woke up from my nap during Hackathon."
-    write-host "But if I finish everything then what will you do. And I don't think 150$ and 15 seconds of online fame amounts to this much work ;P ."
+    write-host "But if I finish everything then what will you do. And I don't think 150$ and 15 seconds of online fame amounts to this much work ;P . The tigretones already spent that much on their lunch during Hackathon."
+    write-host "Here is the API Reference: https://platform.openai.com/docs/guides/vision"
     write-host "Yes, I am bitter. There are 15 inches outside my door and I am postponing shoveling."
 }
 
 if($taskList -eq 5){
-    write-host "Alexandar has done this already. See details at https://www.linkedin.com/pulse/how-i-used-ai-generate-orchestrate-composable-cloud-alex-doroshenko-ngfjc/"
+    write-host "Alexandar Doroshenko (My Guru) has done this already. See details at https://www.linkedin.com/pulse/how-i-used-ai-generate-orchestrate-composable-cloud-alex-doroshenko-ngfjc/"
+    write-host "To do this you will need: A template, find the Text and html fields from the tempalte, how many pieces of content you want to create, a topic and then a text input like below."
+    write-host "Can you please create me {number} paragraphs about {topic} with {list of fields from template}"
+    write-host "This will return you the content. Then create an item and fill the fields with the content and BADA BING BADA BOOM!"
 }
